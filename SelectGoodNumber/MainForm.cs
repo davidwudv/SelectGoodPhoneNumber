@@ -246,9 +246,10 @@ namespace SelectGoodNumber
             MainDataGridView.Enabled = false;
             MainDataGridView.Columns.Clear();
             var firstRow = sheet.GetRow(0);//标题栏
-            if (firstRow.Cells.Count < 2)
+            if (firstRow.Cells.Count < 1)
             {
                 MessageBox.Show("文件内容不正确！");
+                progress.Stop();
                 return;
             }
             MainDataGridView.Columns.Add("手机号码列", "手机号码");
