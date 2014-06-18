@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using NPOI.XSSF.UserModel;
@@ -121,9 +120,9 @@ namespace SelectGoodNumber
 
                 InitDataTable(sheet);
             }
-            catch(System.IO.IOException ex)
+            catch(System.IO.IOException)
             {
-                MessageBox.Show("此文件被其他进程占用，无法打开，如果你用Excel或其他程序打开了此文件，请先关闭！");
+                MessageBox.Show("此文件被其他进程占用（或无权限读取），无法打开，如果你用Excel或其他程序打开了此文件，请先关闭！");
             }
             catch(Exception ex)
             {
@@ -158,19 +157,25 @@ namespace SelectGoodNumber
 
                 ISheet sheet = workbook.CreateSheet("Sheet1");
                 var firstExcelRow = sheet.CreateRow(0);
-                int columnCount = 6;
+                int columnCount = 7;
                 for (int i = 0; i < columnCount; ++i)
                 {
                     firstExcelRow.CreateCell(i, CellType.String);
                 }
                 sheet.SetColumnWidth(0, 5500);
-                sheet.SetColumnWidth(1, 5500);
-                firstExcelRow.Cells[0].SetCellValue("ICCID");
-                firstExcelRow.Cells[1].SetCellValue("手机号码");
-                firstExcelRow.Cells[2].SetCellValue("等级");
-                firstExcelRow.Cells[3].SetCellValue("幸运数字");
-                firstExcelRow.Cells[4].SetCellValue("号码特征");
-                firstExcelRow.Cells[5].SetCellValue("价格");
+                sheet.SetColumnWidth(1, 3500);
+                sheet.SetColumnWidth(2, 3500);
+                sheet.SetColumnWidth(3, 6000);
+                sheet.SetColumnWidth(4, 5500);
+                sheet.SetColumnWidth(5, 3000);
+                sheet.SetColumnWidth(6, 3000);
+                firstExcelRow.Cells[0].SetCellValue("手机号码");
+                firstExcelRow.Cells[1].SetCellValue("等级");
+                firstExcelRow.Cells[2].SetCellValue("幸运数字");
+                firstExcelRow.Cells[3].SetCellValue("号码特征");
+                firstExcelRow.Cells[4].SetCellValue("号码基础价格(元)");
+                firstExcelRow.Cells[5].SetCellValue("选号费(元)");
+                firstExcelRow.Cells[6].SetCellValue("总价(元)");
 
                 for(int i = 0; i < MainDataGridView.Rows.Count; ++i)
                 {
@@ -189,9 +194,9 @@ namespace SelectGoodNumber
                 stream = new System.IO.FileStream(filepath, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read);
                 workbook.Write(stream);
             }
-            catch(System.IO.IOException ex)
+            catch(System.IO.IOException)
             {
-                MessageBox.Show("此文件被其他进程占用，无法打开，如果你用Excel或其他程序打开了此文件，请先关闭！");
+                MessageBox.Show("此文件被其他进程占用（或无权限读取），无法打开，如果你用Excel或其他程序打开了此文件，请先关闭！");
             }
             catch (Exception ex)
             {
@@ -222,7 +227,7 @@ namespace SelectGoodNumber
 
         private void About_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string msg = "Version 1.0\n" +
+            string msg = "Version 1.1\n" +
                                     "Author: 吴德伟\n" +
                                     "Email: davidwudv@gmail.com\n" +
                                     "Copyright ©: 广东讯源通讯科技有限公司";
@@ -236,41 +241,50 @@ namespace SelectGoodNumber
 
         private void InitDataTable(ISheet sheet)
         {
-            DataTable table = new DataTable();
+            ProgressForm progress = new ProgressForm();
+            progress.Start();
+            MainDataGridView.Enabled = false;
+            MainDataGridView.Columns.Clear();
             var firstRow = sheet.GetRow(0);//标题栏
             if (firstRow.Cells.Count < 2)
             {
                 MessageBox.Show("文件内容不正确！");
                 return;
             }
-            table.Columns.Add("ICCID");
-            table.Columns.Add("手机号码");
-            table.Columns.Add("等级");
-            table.Columns.Add("幸运数字");
-            table.Columns.Add("号码特征");
-            table.Columns.Add("价格");
+            MainDataGridView.Columns.Add("手机号码列", "手机号码");
+            MainDataGridView.Columns.Add(new DataGridViewComboBoxColumn());
+            MainDataGridView.Columns[1].Name = "等级";
+            MainDataGridView.Columns[1].HeaderText = "等级";
+            MainDataGridView.Columns.Add("幸运数字列", "幸运数字");
+            MainDataGridView.Columns.Add("号码特征列", "号码特征");
+            MainDataGridView.Columns.Add("号码基础价格(元)列", "号码基础价格(元)");
+            MainDataGridView.Columns.Add("选号费(元)列", "选号费(元)");
+            MainDataGridView.Columns.Add("总价列", "总价");
+
+            //DataGridViewCell cell = new DataGridViewComboBoxCell();
+            //MainDataGridView.Columns[1] = new DataGridViewComboBoxColumn();
+            //MainDataGridView.Columns[1].CellTemplate = cell;
 
             for (int i = 1; i <= sheet.LastRowNum; ++i)
             {
-                var dataRow = table.NewRow();
+                progress.SetProgress((int)((double)i / sheet.LastRowNum * 100));
+                int rowIndex = MainDataGridView.Rows.Add(1);
+                DataGridViewRow newRow = MainDataGridView.Rows[rowIndex];
                 var cellsCount = sheet.GetRow(i).Cells.Count;
                 string phoneNumber;
                 var regularList = CurrentSettingForm.Numbers;
                 NumberItem matchItem = new NumberItem();//最高优先级匹配的item
                 List<string> features = new List<string>();
-                if(cellsCount > 1)
-                {
-                    phoneNumber = sheet.GetRow(i).Cells[1].ToString();
-                    dataRow[0] = sheet.GetRow(i).Cells[0].ToString();
-                }
-                else
-                {
+                if(cellsCount > 0)
                     phoneNumber = sheet.GetRow(i).Cells[0].ToString();
-                    dataRow[0] = String.Empty;
-                }
+                else
+                    phoneNumber = String.Empty;
 
-                int luckyNumber = LuckyNumberRegular.Match(phoneNumber);
-                dataRow[1] = phoneNumber;
+                newRow.Cells[0].Value = phoneNumber;
+                List<int> luckyNumbers = LuckyNumberRegular.Match(phoneNumber);
+                foreach (var item in _settingForm.NumberLevelsComboBox.Items)
+                    ((DataGridViewComboBoxCell)newRow.Cells[1]).Items.Add((string)item);
+                ((DataGridViewComboBoxCell)newRow.Cells[1]).Items.Add("普通号码");
 
                 foreach (var item in regularList)
                 {
@@ -299,7 +313,7 @@ namespace SelectGoodNumber
 
                 if (matchItem.Priority != -100)
                 {
-                    dataRow[2] = matchItem.Level;
+                    newRow.Cells[1].Value = matchItem.Level;
                     StringBuilder builder = new StringBuilder();
                     foreach (string it in features)
                     {
@@ -307,18 +321,29 @@ namespace SelectGoodNumber
                         builder.Append(",");
                     }
                     builder.Remove(builder.Length - 1, 1);
-                    dataRow[4] = builder.ToString();
+                    newRow.Cells[3].Value = builder.ToString();
                 }
                 else
-                    dataRow[2] = "普通号码";
+                    newRow.Cells[1].Value = "普通号码";
 
-                if (luckyNumber != -1)
-                    dataRow[3] = luckyNumber.ToString() + "比较多";
+                if (luckyNumbers.Count > 0)
+                {
+                    StringBuilder builder2 = new StringBuilder();
+                    foreach(int it in luckyNumbers)
+                    {
+                        builder2.Append(it.ToString());
+                        builder2.Append(",");
+                    }
+                    builder2.Remove(builder2.Length - 1, 1);
+                    builder2.Append("比较多");
+                    newRow.Cells[2].Value = builder2.ToString();
+                }
 
-                table.Rows.Add(dataRow);
             }
 
-            this.MainDataGridView.DataSource = table;
+            //MainDataGridView.Sort(MainDataGridView.Columns[1], ListSortDirection.Descending);
+            MainDataGridView.Enabled = true;
+            progress.Stop();
         }
 
         /// <summary>
@@ -337,6 +362,11 @@ namespace SelectGoodNumber
                     return item;
             }
             return null;
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MainDataGridView.Rows.Clear();
         }
 
     }

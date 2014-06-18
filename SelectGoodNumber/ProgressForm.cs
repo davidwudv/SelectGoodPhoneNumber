@@ -41,6 +41,7 @@ namespace SelectGoodNumber
         public void Start()
         {
             _runThread = new Thread(_start);
+            _runThread.IsBackground = true;
             _runThread.Start();
         }
 

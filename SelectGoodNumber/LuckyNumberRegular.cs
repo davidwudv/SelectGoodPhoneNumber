@@ -11,27 +11,38 @@ namespace SelectGoodNumber
         /// </summary>
         /// <param name="number">需要验证的号码</param>
         /// <returns>成功返回幸运数字，失败返回-1</returns>
-        public static int Match(string number)
+        public static List<int> Match(string number)
         {
             var array = number.ToCharArray();
-            int[] result = new int[10];
+            int[] counts = new int[10];
 
             for(int i = 3; i < array.Length; ++i)
             {
-                result[Convert.ToInt32(array[i].ToString())]++;
+                counts[Convert.ToInt32(array[i].ToString())]++;
             }
 
             int index = -1, maxValue = -1;
-            for (int i = 0; i < result.Length; ++i)
+            for (int i = 0; i < counts.Length; ++i)
             {
-                if(result[i] > maxValue && result[i] >= 3)
+                if(counts[i] > maxValue && counts[i] >= 3)
                 {
-                    maxValue = result[i];
+                    maxValue = counts[i];
                     index = i;
                 }
             }
 
-            return index;
+            if (index == -1)
+                return new List<int>();
+
+            List<int> results = new List<int>();
+            results.Add(index);
+            for (int i = 0; i < counts.Length; ++i )
+            {
+                if (i != index && counts[i] == counts[index])
+                    results.Add(i);
+            }
+
+            return results;
         }
     }
 }

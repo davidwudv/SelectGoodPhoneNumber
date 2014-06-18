@@ -36,9 +36,9 @@
             this.button_Delete = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.DeleteCurrentRow_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.FeatureColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RegularExpressionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPriority = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RegularExpressionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FeatureColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_CurrentNumberLevelInfo)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -111,20 +111,20 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DeleteCurrentRow_ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(127, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 26);
             // 
             // DeleteCurrentRow_ToolStripMenuItem
             // 
             this.DeleteCurrentRow_ToolStripMenuItem.Name = "DeleteCurrentRow_ToolStripMenuItem";
-            this.DeleteCurrentRow_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.DeleteCurrentRow_ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.DeleteCurrentRow_ToolStripMenuItem.Text = "删除此行";
             this.DeleteCurrentRow_ToolStripMenuItem.Click += new System.EventHandler(this.DeleteCurrentRow_ToolStripMenuItem_Click);
             // 
-            // FeatureColumn
+            // ColumnPriority
             // 
-            this.FeatureColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.FeatureColumn.HeaderText = "特征";
-            this.FeatureColumn.Name = "FeatureColumn";
+            this.ColumnPriority.HeaderText = "优先级";
+            this.ColumnPriority.Name = "ColumnPriority";
+            this.ColumnPriority.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // RegularExpressionColumn
             // 
@@ -132,11 +132,11 @@
             this.RegularExpressionColumn.HeaderText = "正则表达式";
             this.RegularExpressionColumn.Name = "RegularExpressionColumn";
             // 
-            // ColumnPriority
+            // FeatureColumn
             // 
-            this.ColumnPriority.HeaderText = "优先级";
-            this.ColumnPriority.Name = "ColumnPriority";
-            this.ColumnPriority.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.FeatureColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.FeatureColumn.HeaderText = "特征";
+            this.FeatureColumn.Name = "FeatureColumn";
             // 
             // SettingForm
             // 
