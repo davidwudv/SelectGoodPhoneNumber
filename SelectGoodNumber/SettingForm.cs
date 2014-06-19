@@ -184,7 +184,9 @@ namespace SelectGoodNumber
             if (_oldValue == newValue)
                 return;
 
-            int changedItem;
+            string currentLevel = comboBox_NumberLevel.Text;
+            string currentFeature = (string)dataGridView_CurrentNumberLevelInfo.CurrentRow.Cells[0].Value;
+            int changedItemIndex;
             if (e.ColumnIndex == 0)//特征被更改
             {
                 if(_numbers.FindIndex((item) => item.Feature == newValue) >= 0)
@@ -192,29 +194,21 @@ namespace SelectGoodNumber
                     MessageBox.Show("不允许出现相同的特征！");
                     return;
                 }
-                changedItem = _numbers.FindIndex((item) => item.Feature == _oldValue);
-                if (changedItem >= 0)
-                    _numbers[changedItem].Feature = newValue;
+                changedItemIndex = _numbers.FindIndex((item) => item.Level == currentLevel && item.Feature == _oldValue);
+                if (changedItemIndex >= 0)
+                    _numbers[changedItemIndex].Feature = newValue;
             }
             else if (e.ColumnIndex == 1)//正则表达被更改
             {
-                changedItem = _numbers.FindIndex((item) => item.RegularExpression == _oldValue);
-                if (changedItem >= 0)
-                    _numbers[changedItem].RegularExpression = newValue;
+                changedItemIndex = _numbers.FindIndex((item) => item.Level == currentLevel && item.Feature == currentFeature);
+                if (changedItemIndex >= 0)
+                    _numbers[changedItemIndex].RegularExpression = newValue;
             }
             else if(e.ColumnIndex == 2)//优先级被修改
             {
-                string level = comboBox_NumberLevel.Text;
-                foreach(var item in _numbers)
-                {
-                    if (item.Level == level)
-                        item.Priority = Convert.ToInt32(newValue);
-                }
-
-                for (int i = 0; i < dataGridView_CurrentNumberLevelInfo.Rows.Count; ++i)
-                {
-                    dataGridView_CurrentNumberLevelInfo.Rows[i].Cells[2].Value = newValue;
-                }
+                changedItemIndex = _numbers.FindIndex((item) => item.Level == currentLevel && item.Feature == currentFeature);
+                if (changedItemIndex >= 0)
+                    _numbers[changedItemIndex].Priority = Convert.ToInt32(newValue);
             }
         }
 

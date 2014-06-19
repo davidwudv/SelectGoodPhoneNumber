@@ -108,14 +108,14 @@
             // Setting_ToolStripMenuItem
             // 
             this.Setting_ToolStripMenuItem.Name = "Setting_ToolStripMenuItem";
-            this.Setting_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.Setting_ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.Setting_ToolStripMenuItem.Text = "设置";
             this.Setting_ToolStripMenuItem.Click += new System.EventHandler(this.Setting_ToolStripMenuItem_Click);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.clearToolStripMenuItem.Text = "清空表格";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
@@ -148,7 +148,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MainDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.MainDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.MainDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.MainDataGridView.ImeMode = System.Windows.Forms.ImeMode.On;
             this.MainDataGridView.Location = new System.Drawing.Point(12, 27);

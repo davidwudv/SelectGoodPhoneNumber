@@ -69,14 +69,12 @@ namespace SelectGoodNumber
             if (!comboBox_NumberLevel.Items.Contains(item.Level))
                 comboBox_NumberLevel.Items.Add(item.Level);
 
-            //textBox_Priority.Enabled = true;
             this.Close();
         }
 
         private void button_Cancel_Click(object sender, EventArgs e)
         {
             ClearText();
-            //textBox_Priority.Enabled = true;
             this.Close();
         }
 
@@ -106,13 +104,9 @@ namespace SelectGoodNumber
             string currentText = comboBox_NumberLevel.Text.Trim();
             int index = _settingForm.Numbers.FindIndex((it) => it.Level == currentText);
             if (index < 0)
-            {
-                textBox_Priority.Enabled = true;
                 return;
-            }
 
             textBox_Priority.Text = _settingForm.Numbers[index].Priority.ToString();
-            textBox_Priority.Enabled = false;
         }
     }
 }

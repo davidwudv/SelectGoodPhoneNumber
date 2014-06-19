@@ -294,7 +294,7 @@ namespace SelectGoodNumber
                         string lucky = LuckyNumbersMatch(phoneNumber, item.RegularExpression);
                         if (lucky != null)
                         {
-                            features.Add(item.Feature);
+                            features.Add(item.Feature + lucky);
                             if (item.Priority > matchItem.Priority)
                                 matchItem = item;
                         }
@@ -352,6 +352,7 @@ namespace SelectGoodNumber
         /// </summary>
         /// <param name="phoneNumber">手机号码</param>
         /// <param name="luckyNumber">吉祥号码串，以逗号分隔</param>
+        /// <returns></returns>
         private string LuckyNumbersMatch(string phoneNumber , string luckyNumbers)
         {
             var luckyNumbersArray = luckyNumbers.Split(',');
